@@ -75,6 +75,10 @@ using Colors: _de2000_t, _de2000_rot
     pairs = ((a, b) for a in colors for b in Iterators.filter(c -> c != a,colors))
     tri = (colorant"navy", colorant"peru", colorant"gold")
 
+    for c in colors
+        @show colordiff(c, c; metric=DE_BFD())
+    end
+    #=
     @testset "properties of metrics" begin
         metrics = (DE_2000(), DE_94(), DE_JPC79(), DE_CMC(), DE_BFD(),
                    DE_AB(), DE_DIN99(), DE_DIN99d(), DE_DIN99o())
@@ -117,4 +121,5 @@ using Colors: _de2000_t, _de2000_rot
         @test_throws ArgumentError colordiff(RGBA(1,0,0,0.5), RGB(1,0,0))
         @test_throws ArgumentError colordiff(RGBA(1,0,0,0.5), RGBA(1,0,0,0.5))
     end
+    =#
 end

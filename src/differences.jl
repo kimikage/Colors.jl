@@ -373,8 +373,11 @@ end
 function _colordiff(a_xyz::XYZ{T}, b_xyz::XYZ{T}, m::DE_BFD) where T
     F = typeof(0.5f0 * zero(T)) === Float32 ? Float32 : promote_type(Float64, T)
 
-    la = muladd(F(54.6), log10(a_xyz.y + F(1.5)), F(-9.6))
-    lb = muladd(F(54.6), log10(b_xyz.y + F(1.5)), F(-9.6))
+    l_bfd(y) = muladd(F(54.6), log10(y + F(1.5)), F(-9.6))
+    la, lb = l_bfd.((a_xyz.y, b_xyz.y))
+
+    @show fma(F(54.6), log10(a_xyz.y + F(1.5)), F(-9.6))
+    @show F(54.6) * log10(b_xyz.y + F(1.5)) + F(-9.6)
 
     # Convert into Lab with the proper white point
     wpf = XYZ{F}(m.wp)
@@ -382,14 +385,14 @@ function _colordiff(a_xyz::XYZ{T}, b_xyz::XYZ{T}, m::DE_BFD) where T
     b_lab = convert(Lab, b_xyz, wpf)
 
     # Substitute the different L values
-    a = Lab(la, a_lab.a, a_lab.b)
-    b = Lab(lb, b_lab.a, b_lab.b)
+    @show a = Lab(la, a_lab.a, a_lab.b)
+    @show b = Lab(lb, b_lab.a, b_lab.b)
 
     # Calculate deltas in each direction
-    dl, dc, dh = b.l - a.l, delta_c(b, a), delta_h(b, a)
+    @show dl, dc, dh = b.l - a.l, delta_c(b, a), delta_h(b, a)
 
     # Find the mean value of the inputs to use as the "standard"
-    mc, mh = (chroma(a) + chroma(b)) * F(0.5), mean_hue(a, b)
+    @show mc, mh = (chroma(a) + chroma(b)) * F(0.5), mean_hue(a, b)
 
     # Correction terms for a variety of nonlinearities in CIELAB.
     g = sqrt(mc^4 / (mc^4 + 14000))
@@ -409,9 +412,9 @@ function _colordiff(a_xyz::XYZ{T}, b_xyz::XYZ{T}, m::DE_BFD) where T
          F( 0.226) * cosd(4mh + 140) +
          F(-0.194) * cosd(5mh + 280)
 
-    dcc = muladd(F(0.035), mc / muladd(F(0.00365), mc, 1) , F(0.521))
-    dhh = dcc * muladd(g, t, 1 - g)
-    rt = rc * rh
+    @show dcc = muladd(F(0.035), mc / muladd(F(0.00365), mc, 1) , F(0.521))
+    @show dhh = dcc * muladd(g, t, 1 - g)
+    @show rt = rc * rh
 
     # Final calculation
     sqrt((dl/F(m.kl))^2 + (dc/(F(m.kc)*dcc))^2 + (dh/dhh)^2 + rt*((dc*dh)/(dcc*dhh)))
