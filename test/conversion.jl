@@ -251,15 +251,15 @@ end
 
     # Selection of Oklch tests from the WPT test suite (https://wpt.fyi/results/css/css-color)
     @testset "Oklch <-> RGB" begin
-        @test convert(Oklch, RGB{Float32}(0.706, 0.024, 0.371)) ≈ Oklch{Float32}(0.50, 0.20,   0) atol=1e-1
-        @test convert(Oklch, RGB{Float32}(0.231, 0.317, 0.826)) ≈ Oklch{Float32}(0.50, 0.20, 270) atol=1e-1
-        @test convert(Oklch, RGB{Float32}(0.320, 0.858, 0.611)) ≈ Oklch{Float32}(0.80, 0.15, 160) atol=1e-1
-        @test convert(Oklch, RGB{Float32}(0.673, 0.278, 0.523)) ≈ Oklch{Float32}(0.55, 0.15, 345) atol=1e-1
+        @test convert(Oklch, RGB{Float32}(0.706, 0.024, 0.371)) ≈ Oklch{Float32}(0.50, 0.20,   0) atol=4e-2
+        @test convert(Oklch, RGB{Float32}(0.231, 0.317, 0.826)) ≈ Oklch{Float32}(0.50, 0.20, 270) atol=2e-3 rtol=2e-4
+        @test convert(Oklch, RGB{Float32}(0.320, 0.858, 0.611)) ≈ Oklch{Float32}(0.80, 0.15, 160) atol=2e-3 rtol=2e-4
+        @test convert(Oklch, RGB{Float32}(0.673, 0.278, 0.523)) ≈ Oklch{Float32}(0.55, 0.15, 345) atol=2e-3 rtol=2e-4
 
-        @test convert(RGB, Oklch{Float32}(0.50, 0.20,   0)) ≈ RGB{Float32}(0.706, 0.024, 0.371) atol=1e-1
-        @test convert(RGB, Oklch{Float32}(0.50, 0.20, 270)) ≈ RGB{Float32}(0.231, 0.317, 0.826) atol=1e-1
-        @test convert(RGB, Oklch{Float32}(0.80, 0.15, 160)) ≈ RGB{Float32}(0.320, 0.858, 0.611) atol=1e-1
-        @test convert(RGB, Oklch{Float32}(0.55, 0.15, 345)) ≈ RGB{Float32}(0.673, 0.278, 0.523) atol=1e-1
+        @test convert(RGB, Oklch{Float32}(0.50, 0.20,   0)) ≈ RGB{Float32}(0.706, 0.024, 0.371) atol=2e-3
+        @test convert(RGB, Oklch{Float32}(0.50, 0.20, 270)) ≈ RGB{Float32}(0.231, 0.317, 0.826) atol=2e-3
+        @test convert(RGB, Oklch{Float32}(0.80, 0.15, 160)) ≈ RGB{Float32}(0.320, 0.858, 0.611) atol=2e-3
+        @test convert(RGB, Oklch{Float32}(0.55, 0.15, 345)) ≈ RGB{Float32}(0.673, 0.278, 0.523) atol=2e-3
     end
 
     @testset "custom types" begin
